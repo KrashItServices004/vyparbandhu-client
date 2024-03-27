@@ -55,8 +55,10 @@ const ServicePage = () => {
     const [disble, setDisble] = useState(false)
     const [selectDocument, setSelectDocument] = useState()
     const [documentList, setDocumentList] = useState();
+    const [payDetials, setPayDetails] = useState()
+    const [userAllDetails, setUserAllDetails] = useState()
 
-
+    console.log(payDetials, 'payDetials')
 
     const handleSectionClick1 = (section) => {
         setActiveSection1(section);
@@ -156,7 +158,8 @@ const ServicePage = () => {
     }
 
     const getData = async (id) => {
-        let url = `http://localhost:5000/admin/getuser`
+
+        let url = `${process.env.REACT_APP_PORT}/admin/getuser`
         try {
             const response = await fetch(url, {
                 method: "POST",
@@ -165,6 +168,7 @@ const ServicePage = () => {
             });
             const data = await response.json();
             if (response.status === 200) {
+                setUserAllDetails(data?.user)
                 setUserData(data?.user?.documents)
 
             } else {
@@ -184,7 +188,7 @@ const ServicePage = () => {
     }
 
     const AddDocument = async () => {
-        let url = `http://localhost:5000/admin/addDocuments`
+        let url = `${process.env.REACT_APP_PORT}/admin/addDocuments`
 
         if (file && selectDocument !== "0") {
             setDisble(true)
@@ -215,6 +219,29 @@ const ServicePage = () => {
         }
     }
 
+
+    const CreateOrder = async () => {
+        let userId = localStorage.getItem('id')
+       
+        let url = `${process.env.REACT_APP_PORT}/admin/order/createOrder`
+        try {
+            const response = await fetch(url, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ userData: userAllDetails , package:payDetials , userId:userId })
+            });
+            const data = await response.json();
+            if (response.status === 200) {
+              toast.success('Order Created Successfully')
+
+            } else {
+                toast.error('somthing get wrong')
+            }
+        } catch (e) {
+            toast.error(e)
+        }
+
+    }
 
     var allDocumentStatus;
     return (
@@ -636,7 +663,7 @@ const ServicePage = () => {
                                                                         </ul>
                                                                         <div className="text-center">
 
-                                                                            <button className="btn px-5 text-white  " style={{ background: "#198754" }} onClick={() => { PayNow() }}><b>Pay Now</b></button>
+                                                                            <button className="btn px-5 text-white  " style={{ background: "#198754" }} onClick={() => { PayNow(); setPayDetails(data) }}><b>Pay Now</b></button>
                                                                         </div>
                                                                     </div>
                                                                 </div>
@@ -1048,9 +1075,9 @@ const ServicePage = () => {
 
             {
                 sidebar &&
-                <div class="offcanvas offcanvas-end w-25 show" tabindex="-1" id="offcanvas" data-bs-keyboard="false" data-bs-backdrop="false" style={{ boxShadow: "0 0.5rem 3rem 0 rgba(0, 0, 0, 0.1)", background: "#1d1919", color: "white" }}>
-                    <div class="offcanvas-header">
-                        <h4 class="offcanvas-title d-none d-sm-block" id="offcanvas">Document List</h4>
+                <div class="offcanvas offcanvas-end show sidebar_width" tabindex="-1" id="offcanvas" data-bs-keyboard="false" data-bs-backdrop="false" style={{ boxShadow: "0 0.5rem 3rem 0 rgba(0, 0, 0, 0.1)", background: "rgb(25, 135, 84)", color: "white" }}>
+                    <div class="offcanvas-header" style={{ display: "flex", justifyContent: "space-between", padding: "0px 10px" }}>
+                        <h4 class="offcanvas-title d-block" id="offcanvas">Document List</h4>
                         <button type="button" class=" " data-bs-dismiss="offcanvas" aria-label="Close" style={{ color: "white", border: "none", background: "transparent" }} onClick={() => { setSidebar(false) }}> <i class="bi bi-x-lg"></i></button>
                     </div>
                     <div class="offcanvas-body px-0">
@@ -1058,7 +1085,7 @@ const ServicePage = () => {
 
                             {
                                 requiredData?.map((item) => {
-                                     allDocumentStatus = requiredData.every(item => {
+                                    allDocumentStatus = requiredData.every(item => {
                                         const dataStatus = userData.filter(data => data.name === item.document);
                                         return dataStatus.length > 0;
                                     });
@@ -1068,19 +1095,35 @@ const ServicePage = () => {
                                     return (
                                         <>
 
-                                            <li class="nav-item">
-                                                <a href="#" class="nav-link text-truncate" style={{ fontSize: "20px" }}>
-                                                    {
-                                                        dataStatus.length > 0 ?
-                                                            <i class="bi bi-check2-circle" style={{ color: "#00e300" }}></i>
-                                                            :
+                                            <li class="nav-item d-flex w-100" style={{ fontSize: "20px", padding: '5px 20px', justifyContent: 'space-between' }}>
+                                                {/* <a href="#" class="nav-link text-truncate" style={{ fontSize: "20px" }}> */}
+                                                {
+                                                    dataStatus.length > 0 ?
+                                                        <>
+                                                            <div style={{ display: "flex" }}>
+
+                                                                <i class="bi bi-check2-circle" style={{ color: "#00e300" }}></i>
+                                                                <span class="ms-1  d-inline" >{item.document}</span>
+                                                            </div>
+                                                            {
+                                                                !allDocumentStatus &&
+
+                                                                <div>
+                                                                    <button type="button" class="btn btn-primary" style={{ backgroundColor: "rgb(254, 180, 68)", border: "none" }} onClick={() => { openUploadModal() }} disabled={allDocumentStatus ? true : false}><i class="bi bi-cloud-arrow-up"></i></button>
+
+                                                                </div>
+                                                            }
+                                                        </>
+                                                        :
+                                                        <>
 
                                                             <i class="bi bi-exclamation-circle" style={{ color: "rgb(255 0 0)" }}></i>
-                                                    }
+                                                            <span class="ms-1 d-none d-sm-inline" >{item.document}</span>
+                                                        </>
+                                                }
 
 
-                                                    <span class="ms-1 d-none d-sm-inline" >{item.document}</span>
-                                                </a>
+                                                {/* </a> */}
                                             </li>
                                         </>
                                     )
@@ -1088,15 +1131,10 @@ const ServicePage = () => {
                             }
 
                         </ul>
-                        <div style={{ padding: '1rem 1rem' }}>
-                        {console.log(allDocumentStatus)}
-                            {
-                                allDocumentStatus ?
-                                    <button type="button" class="btn btn-primary">Pay Now</button>
-                                    :
-                                    <button type="button" class="btn btn-primary" onClick={() => { openUploadModal() }}>Upload Document</button>
+                        <div style={{ padding: '1rem 1rem', flexDirection: "column", gap: "10px", position: 'absolute', bottom: "60px" }} className="d-flex w-100">
+                            <button type="button" class="btn btn-primary" disabled={allDocumentStatus ? false : true} style={{ backgroundColor: "rgb(254, 180, 68)", border: "none", padding: '12px', fontSize: "30px", width: "100%", fontWeight: "600" }}
+                                onClick={() => { CreateOrder() }}>Pay Now</button>
 
-                            }
 
                         </div>
                     </div>

@@ -15,7 +15,7 @@ const WhyVyapar = () => {
             <div>
                 <div className="row text-center mt-2" style={{ padding: "0px 60px" }}>
                     <div className="col-sm-12 col-md-6 px-5">
-                        <img src={whyVyapar} alt="" />
+                        <img src={whyVyapar} alt="" style={{width:"100%"}} />
                     </div>
                     <div className="col-sm-12 col-md-6 py-3">
                         <div className='row my-5'>

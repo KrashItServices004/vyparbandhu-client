@@ -12,7 +12,7 @@ const MultiImage = ({ data }) => {
 
                 <h4 className=' mt-3 text-center mb-3' >
                     <div style={{ fontSize: '20px' }}>
-                        <pre style={{ width: '100%', whiteSpace: 'pre-wrap', textAlign: 'justify', fontFamily: 'inherit' }}>
+                        <pre style={{ width: '100%', whiteSpace: 'pre-wrap', textAlign: 'justify', fontFamily: 'inherit' ,scrollbarWidth:"none"}}>
                             {data.description}
                         </pre>
                     </div>
@@ -39,7 +39,7 @@ const MultiImage = ({ data }) => {
 
                                                 <img style={{ borderRadius: "20px" }} src={`${process.env.REACT_APP_PORT}/admin/service/file/${image.filename && image.filename}`} className="mb-1 w-100" alt="No Previous Image" />
                                             </div>
-                                        }
+                                            }
                                         {
                                             data?.images.length > 1 && image.filename &&
 

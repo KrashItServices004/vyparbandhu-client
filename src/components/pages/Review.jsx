@@ -19,7 +19,7 @@ const Review = () => {
 
     const SubmitData = async()=>{
         if(name && phoneNumber && email){
-            let url = `http://localhost:5000/admin/creatExpertCall`
+            let url = `${process.env.REACT_APP_PORT}/admin/creatExpertCall`
                 try {
                     const response = await fetch(url, {
                         method: "POST",
@@ -59,7 +59,7 @@ const Review = () => {
                         <section className="vh-100 container_body">
                             <div className="container py-5 h-100">
                                 <div className="row px-3 d-flex align-items-center justify-content-center h-100">
-                                    <div className="col-md-10 w-auto col-lg-10 col-xl-9 card flex-row mx-auto px-0">
+                                    <div className="col-md-10 w-auto col-lg-10 col-xl-9 card flex-row mx-auto px-0" style={{width:"70%"}}>
 
 
                                         <div className="card-body">

@@ -136,7 +136,7 @@ const Blog = () => {
                                     </div>
                                 </div>
                             </div>
-                            <div class="card">
+                            {/* <div class="card">
                                 <div class="header">
                                     <h2>Categories</h2>
                                 </div>
@@ -150,7 +150,7 @@ const Blog = () => {
                                         <li><a href="" style={{ color: "blue" }}>other</a></li>
                                     </ul>
                                 </div>
-                            </div>
+                            </div> */}
                             <div class="card">
                                 <div class="header">
                                     <h2>Popular Posts</h2>

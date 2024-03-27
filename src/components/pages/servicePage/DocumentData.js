@@ -10,7 +10,10 @@ const DocumentData = ({ data }) => {
                 {
                     data?.description &&
 
-                    <h4 className=' mt-3 text-center' > {data?.description}</h4>
+                    <h4 className=' mt-3 text-center' >
+                    {data?.description}
+                    {/* <pre style={{width:"100%" , whiteSpace:"pre-wrap", textAlign:"justify" , fontFamily:"inherit" , scrollbarWidth:"none"}}> {data?.description}</pre> */}
+                    </h4>
                 }
                 {
                     data?.documentsData &&
